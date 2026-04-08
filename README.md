@@ -1,6 +1,6 @@
 # WTWR (What to Wear): Back End
 
-This project provides the back-end API for the WTWR application. It connects to MongoDB, stores users and clothing items, and exposes routes for creating users, creating and deleting items, and liking or unliking clothing items.
+This project provides the back end API for the WTWR application. It connects to MongoDB, stores users and clothing items, and exposes routes for creating users, creating and deleting items, and liking or unliking clothing items.
 
 ## Functionality
 
@@ -19,6 +19,16 @@ The server supports these main features:
 - Prettier and EditorConfig for consistent formatting
 - REST-style routing with controllers separated from route definitions
 
-## Media
+## Examples of API Requests
 
-Add screenshots, GIFs, or a short demo video link here before submission if your reviewer expects them.
+Create a user:
+![Create a user](image.png)
+
+Create an item:
+![Create an item](image-1.png)
+
+Like an item:
+![Like an item](image-2.png)
+
+Error response for a user with "name" field less than 2 characters:
+![User error response](image-3.png)
