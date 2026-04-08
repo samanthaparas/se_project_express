@@ -16,7 +16,7 @@ const createItem = (req, res) => {
     imageUrl,
     weather,
     owner: ownerId,
-    })
+  })
     .then((item) => {
       res.status(CREATED_STATUS_CODE).send(item);
     })
@@ -24,7 +24,7 @@ const createItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
-          .send({ message: err.message });
+          .send({ message: "Invalid data" });
       }
       return res
         .status(INTERNAL_SERVER_ERROR_STATUS_CODE)

@@ -22,13 +22,13 @@ The server supports these main features:
 ## Examples of API Requests
 
 Create a user:
-![Create a user](image.png)
+![Create a user](./images/image.png)
 
 Create an item:
-![Create an item](image-1.png)
+![Create an item](./images/image-1.png)
 
 Like an item:
-![Like an item](image-2.png)
+![Like an item](./images/image-2.png)
 
 Error response for a user with "name" field less than 2 characters:
-![User error response](image-3.png)
+![User error response](./images/image-3.png)
