@@ -6,7 +6,6 @@ const {
   NOT_FOUND_STATUS_CODE,
   INTERNAL_SERVER_ERROR_STATUS_CODE,
   FORBIDDEN_ERROR_STATUS_CODE,
-  UNAUTHORIZED_ERROR_STATUS_CODE,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {

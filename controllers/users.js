@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 
-const User = require("../models/user");
+const user = require("../models/user");
 const {
   OK_STATUS_CODE,
   CREATED_STATUS_CODE,
@@ -14,7 +14,8 @@ const {
 } = require("../utils/errors");
 
 const getUsers = (req, res) => {
-  User.find({})
+  user
+    .find({})
     .then((users) => {
       res.status(OK_STATUS_CODE).send(users);
     })
@@ -28,12 +29,18 @@ const getUsers = (req, res) => {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
+  if (!password) {
+    res.status(BAD_REQUEST_STATUS_CODE).send({ message: "Invalid data" });
+    return;
+  }
+
   bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({ name, avatar, email, password: hash }))
-    .then((user) => {
-      user.password = undefined;
-      res.status(CREATED_STATUS_CODE).send(user);
+    .then((hash) => user.create({ name, avatar, email, password: hash }))
+    .then((createdUser) => {
+      const userObject = createdUser.toObject();
+      delete userObject.password;
+      res.status(CREATED_STATUS_CODE).send(userObject);
     })
     .catch((err) => {
       if (err.code === 11000) {
@@ -55,9 +62,10 @@ const createUser = (req, res) => {
 const getUser = (req, res) => {
   const { userId } = req.params;
 
-  User.findById(userId)
+  user
+    .findById(userId)
     .orFail()
-    .then((user) => res.status(OK_STATUS_CODE).send(user))
+    .then((foundUser) => res.status(OK_STATUS_CODE).send(foundUser))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
         return res
@@ -78,15 +86,16 @@ const getUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
-  User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+  user
+    .findUserByCredentials(email, password)
+    .then((foundUser) => {
+      const token = jwt.sign({ _id: foundUser._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
 
       res.status(OK_STATUS_CODE).send({ token });
     })
-    .catch((err) => {
+    .catch(() => {
       res
         .status(UNAUTHORIZED_ERROR_STATUS_CODE)
         .send({ message: "Invalid email or password" });
@@ -94,9 +103,10 @@ const login = (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
-  User.findById(req.user._id)
+  user
+    .findById(req.user._id)
     .orFail()
-    .then((user) => res.status(OK_STATUS_CODE).send(user))
+    .then((foundUser) => res.status(OK_STATUS_CODE).send(foundUser))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
         return res
@@ -112,13 +122,14 @@ const getCurrentUser = (req, res) => {
 const updateUser = (req, res) => {
   const { name, avatar } = req.body;
 
-  User.findByIdAndUpdate(
-    req.user._id,
-    { name, avatar },
-    { new: true, runValidators: true }
-  )
+  user
+    .findByIdAndUpdate(
+      req.user._id,
+      { name, avatar },
+      { new: true, runValidators: true }
+    )
     .orFail()
-    .then((user) => res.status(OK_STATUS_CODE).send(user))
+    .then((updatedUser) => res.status(OK_STATUS_CODE).send(updatedUser))
     .catch((err) => {
       if (err.name === "ValidationError") {
         return res
