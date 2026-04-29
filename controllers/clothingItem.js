@@ -1,4 +1,4 @@
-const ClothingItem = require("../models/clothingItem");
+const clothingItem = require("../models/clothingItem");
 const {
   OK_STATUS_CODE,
   CREATED_STATUS_CODE,
@@ -11,12 +11,13 @@ const createItem = (req, res) => {
   const { name, imageUrl, weather } = req.body;
   const ownerId = req.user._id;
 
-  ClothingItem.create({
-    name,
-    imageUrl,
-    weather,
-    owner: ownerId,
-  })
+  clothingItem
+    .create({
+      name,
+      imageUrl,
+      weather,
+      owner: ownerId,
+    })
     .then((item) => {
       res.status(CREATED_STATUS_CODE).send(item);
     })
@@ -33,7 +34,8 @@ const createItem = (req, res) => {
 };
 
 const getItems = (req, res) => {
-  ClothingItem.find({})
+  clothingItem
+    .find({})
     .then((items) => {
       res.status(OK_STATUS_CODE).send(items);
     })
@@ -47,7 +49,8 @@ const getItems = (req, res) => {
 const deleteItem = (req, res) => {
   const { id } = req.params;
 
-  ClothingItem.findByIdAndDelete(id)
+  clothingItem
+    .findByIdAndDelete(id)
     .orFail()
     .then((item) => res.status(OK_STATUS_CODE).send(item))
     .catch((err) => {
@@ -71,11 +74,8 @@ const likeItem = (req, res) => {
   const { id } = req.params;
   const userId = req.user._id;
 
-  ClothingItem.findByIdAndUpdate(
-    id,
-    { $addToSet: { likes: userId } },
-    { new: true }
-  )
+  clothingItem
+    .findByIdAndUpdate(id, { $addToSet: { likes: userId } }, { new: true })
     .orFail()
     .then((item) => res.status(OK_STATUS_CODE).send(item))
     .catch((err) => {
@@ -99,11 +99,8 @@ const dislikeItem = (req, res) => {
   const { id } = req.params;
   const userId = req.user._id;
 
-  ClothingItem.findByIdAndUpdate(
-    id,
-    { $pull: { likes: userId } },
-    { new: true }
-  )
+  clothingItem
+    .findByIdAndUpdate(id, { $pull: { likes: userId } }, { new: true })
     .orFail()
     .then((item) => res.status(OK_STATUS_CODE).send(item))
     .catch((err) => {
