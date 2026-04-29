@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const routes = require("./routes");
@@ -10,6 +11,7 @@ const { PORT = 3001 } = process.env;
 mongoose.connect("mongodb://localhost:27017/wtwr_db").catch(console.error);
 
 app.use(express.json());
+app.use(cors());
 
 app.post("/signin", login);
 app.post("/signup", createUser);
