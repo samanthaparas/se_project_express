@@ -32,6 +32,7 @@ const createUser = (req, res) => {
     .hash(password, 10)
     .then((hash) => User.create({ name, avatar, email, password: hash }))
     .then((user) => {
+      user.password = undefined;
       res.status(CREATED_STATUS_CODE).send(user);
     })
     .catch((err) => {
