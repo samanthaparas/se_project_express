@@ -5,6 +5,8 @@ const {
   BAD_REQUEST_STATUS_CODE,
   NOT_FOUND_STATUS_CODE,
   INTERNAL_SERVER_ERROR_STATUS_CODE,
+  FORBIDDEN_ERROR_STATUS_CODE,
+  UNAUTHORIZED_ERROR_STATUS_CODE,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
@@ -50,9 +52,19 @@ const deleteItem = (req, res) => {
   const { id } = req.params;
 
   clothingItem
-    .findByIdAndDelete(id)
+    .findById(id)
     .orFail()
-    .then((item) => res.status(OK_STATUS_CODE).send(item))
+    .then((item) => {
+      if (item.owner.toString() !== req.user._id) {
+        return res
+          .status(UNAUTHORIZED_ERROR_STATUS_CODE)
+          .send({ message: "Forbidden" });
+      }
+
+      return clothingItem
+        .findByIdAndDelete(id)
+        .then((deletedItem) => res.status(OK_STATUS_CODE).send(deletedItem));
+    })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
         return res
