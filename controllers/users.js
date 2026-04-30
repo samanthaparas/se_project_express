@@ -86,6 +86,13 @@ const getUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    res
+      .status(BAD_REQUEST_STATUS_CODE)
+      .send({ message: "Email and password are required" });
+    return;
+  }
+
   user
     .findUserByCredentials(email, password)
     .then((foundUser) => {
@@ -95,10 +102,16 @@ const login = (req, res) => {
 
       res.status(OK_STATUS_CODE).send({ token });
     })
-    .catch(() => {
-      res
-        .status(UNAUTHORIZED_ERROR_STATUS_CODE)
-        .send({ message: "Invalid email or password" });
+    .catch((err) => {
+      if (err.message === "Incorrect email or password") {
+        return res
+          .status(UNAUTHORIZED_ERROR_STATUS_CODE)
+          .send({ message: "Invalid email or password" });
+      }
+
+      return res
+        .status(INTERNAL_SERVER_ERROR_STATUS_CODE)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
