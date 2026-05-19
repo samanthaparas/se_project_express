@@ -1,10 +1,11 @@
+const { errors } = require("celebrate");
+const cors = require("cors");
+const express = require("express");
+const mongoose = require("mongoose");
 const {
   validateCreateUser,
   validateLogin,
 } = require("./middlewares/validation");
-const cors = require("cors");
-const express = require("express");
-const mongoose = require("mongoose");
 const errorHandler = require("./middlewares/error-handler");
 const routes = require("./routes");
 const { login, createUser } = require("./controllers/users");
@@ -21,6 +22,9 @@ app.post("/signin", validateLogin, login);
 app.post("/signup", validateCreateUser, createUser);
 
 app.use(routes);
+
+app.use(errors());
+
 app.use(errorHandler);
 
 app.listen(PORT);
