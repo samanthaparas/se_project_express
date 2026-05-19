@@ -1,17 +1,11 @@
 const clothingItem = require("../models/clothingItem");
+const BadRequestError = require("../utils/BadRequestError");
+const NotFoundError = require("../utils/NotFoundError");
+const ForbiddenError = require("../utils/ForbiddenError");
 const {
   OK_STATUS_CODE,
   CREATED_STATUS_CODE,
-  BAD_REQUEST_STATUS_CODE,
-  NOT_FOUND_STATUS_CODE,
-  FORBIDDEN_ERROR_STATUS_CODE,
 } = require("../utils/errors");
-
-const createError = (statusCode, message) => {
-  const err = new Error(message);
-  err.statusCode = statusCode;
-  return err;
-};
 
 const createItem = (req, res, next) => {
   const { name, imageUrl, weather } = req.body;
@@ -29,7 +23,7 @@ const createItem = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return next(createError(BAD_REQUEST_STATUS_CODE, "Invalid data"));
+        return next(new BadRequestError("Invalid data"));
       }
       return next(err);
     });
@@ -52,7 +46,7 @@ const deleteItem = (req, res, next) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== req.user._id) {
-        return next(createError(FORBIDDEN_ERROR_STATUS_CODE, "Forbidden"));
+        return next(new ForbiddenError("Forbidden"));
       }
 
       return clothingItem
@@ -61,10 +55,10 @@ const deleteItem = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return next(createError(NOT_FOUND_STATUS_CODE, "Item not found"));
+        return next(new NotFoundError("Item not found"));
       }
       if (err.name === "CastError") {
-        return next(createError(BAD_REQUEST_STATUS_CODE, "Invalid item ID"));
+        return next(new BadRequestError("Invalid item ID"));
       }
       return next(err);
     });
@@ -80,10 +74,10 @@ const likeItem = (req, res, next) => {
     .then((item) => res.status(OK_STATUS_CODE).send(item))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return next(createError(NOT_FOUND_STATUS_CODE, "Item not found"));
+        return next(new NotFoundError("Item not found"));
       }
       if (err.name === "CastError") {
-        return next(createError(BAD_REQUEST_STATUS_CODE, "Invalid item ID"));
+        return next(new BadRequestError("Invalid item ID"));
       }
       return next(err);
     });
@@ -99,10 +93,10 @@ const dislikeItem = (req, res, next) => {
     .then((item) => res.status(OK_STATUS_CODE).send(item))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return next(createError(NOT_FOUND_STATUS_CODE, "Item not found"));
+        return next(new NotFoundError("Item not found"));
       }
       if (err.name === "CastError") {
-        return next(createError(BAD_REQUEST_STATUS_CODE, "Invalid item ID"));
+        return next(new BadRequestError("Invalid item ID"));
       }
       return next(err);
     });
