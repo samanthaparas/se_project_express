@@ -1,6 +1,5 @@
 const { INTERNAL_SERVER_ERROR_STATUS_CODE } = require("../utils/errors");
 
-// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   console.error(err);
 
