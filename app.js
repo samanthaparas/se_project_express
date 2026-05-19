@@ -1,6 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const errorHandler = require("./middlewares/error-handler");
 const routes = require("./routes");
 const { login, createUser } = require("./controllers/users");
 
@@ -16,5 +17,6 @@ app.post("/signin", login);
 app.post("/signup", createUser);
 
 app.use(routes);
+app.use(errorHandler);
 
 app.listen(PORT);
