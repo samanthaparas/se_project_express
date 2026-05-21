@@ -1,3 +1,4 @@
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { errors } = require("celebrate");
 const cors = require("cors");
 const express = require("express");
@@ -18,13 +19,16 @@ mongoose.connect("mongodb://localhost:27017/wtwr_db").catch(console.error);
 app.use(express.json());
 app.use(cors());
 
+app.use(requestLogger);
+
 app.post("/signin", validateLogin, login);
 app.post("/signup", validateCreateUser, createUser);
 
 app.use(routes);
 
-app.use(errors());
+app.use(errorLogger);
 
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT);
