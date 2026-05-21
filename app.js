@@ -1,8 +1,8 @@
-const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { errors } = require("celebrate");
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 const {
   validateCreateUser,
   validateLogin,
