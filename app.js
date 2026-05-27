@@ -10,6 +10,7 @@ const {
 const errorHandler = require("./middlewares/error-handler");
 const routes = require("./routes");
 const { login, createUser } = require("./controllers/users");
+require("dotenv").config();
 
 const app = express();
 const { PORT = 3001 } = process.env;
