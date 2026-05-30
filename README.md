@@ -62,3 +62,8 @@ Protected routes:
 ## Project Pitch Video
 
 Check out [this video](https://drive.google.com/file/d/1zEoiPOcDTgOOejHQU3CU202Ue-NHEfRE/view?usp=sharing), where I describe my project and some challenges I faced while building it.
+
+## Deployed Application
+
+- Domain: [whattoweartoday.serverpit.com](https://whattoweartoday.serverpit.com)
+- Frontend repository: [se_project_react](https://github.com/samanthaparas/se_project_react)

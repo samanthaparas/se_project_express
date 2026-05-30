@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { errors } = require("celebrate");
 const cors = require("cors");
 const express = require("express");
@@ -10,17 +12,23 @@ const {
 const errorHandler = require("./middlewares/error-handler");
 const routes = require("./routes");
 const { login, createUser } = require("./controllers/users");
-require("dotenv").config();
 
 const app = express();
 const { PORT = 3001 } = process.env;
 
 mongoose.connect("mongodb://localhost:27017/wtwr_db").catch(console.error);
 
+app.use(requestLogger);
+
 app.use(express.json());
 app.use(cors());
 
-app.use(requestLogger);
+// Temporary endpoint required for the PM2 recovery check during code review.
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
 
 app.post("/signin", validateLogin, login);
 app.post("/signup", validateCreateUser, createUser);
