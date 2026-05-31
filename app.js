@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-const { errors } = require("celebrate");
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -36,7 +35,6 @@ app.use(routes);
 
 app.use(errorLogger);
 
-app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, "0.0.0.0", () => {

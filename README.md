@@ -66,4 +66,5 @@ Check out [this video](https://drive.google.com/file/d/1zEoiPOcDTgOOejHQU3CU202U
 ## Deployed Application
 
 - Domain: [whattoweartoday.serverpit.com](https://whattoweartoday.serverpit.com)
+- Backend API: [api.whattoweartoday.serverpit.com](https://api.whattoweartoday.serverpit.com/items)
 - Frontend repository: [se_project_react](https://github.com/samanthaparas/se_project_react)

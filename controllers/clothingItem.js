@@ -1,7 +1,7 @@
 const clothingItem = require("../models/clothingItem");
-const BadRequestError = require("../utils/BadRequestError");
-const NotFoundError = require("../utils/NotFoundError");
-const ForbiddenError = require("../utils/ForbiddenError");
+const BadRequestError = require("../errors/BadRequestError");
+const NotFoundError = require("../errors/NotFoundError");
+const ForbiddenError = require("../errors/ForbiddenError");
 const {
   OK_STATUS_CODE,
   CREATED_STATUS_CODE,
