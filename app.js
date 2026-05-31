@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const { errors } = require("celebrate");
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -17,10 +18,10 @@ const { PORT = 3001 } = process.env;
 
 mongoose.connect("mongodb://localhost:27017/wtwr_db").catch(console.error);
 
-app.use(requestLogger);
-
 app.use(express.json());
 app.use(cors());
+
+app.use(requestLogger);
 
 app.get("/crash-test", () => {
   setTimeout(() => {
@@ -35,6 +36,7 @@ app.use(routes);
 
 app.use(errorLogger);
 
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, "0.0.0.0", () => {
