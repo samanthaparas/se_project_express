@@ -19,7 +19,17 @@ const { PORT = 3001 } = process.env;
 mongoose.connect("mongodb://localhost:27017/wtwr_db").catch(console.error);
 
 app.use(express.json());
-app.use(cors());
+
+app.use(
+  cors({
+    origin: [
+      "https://whattoweartoday.serverpit.com",
+      "http://localhost:3000",
+      "http://localhost:5173",
+    ],
+    credentials: true,
+  })
+);
 
 app.use(requestLogger);
 
